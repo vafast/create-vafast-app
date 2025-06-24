@@ -1,7 +1,14 @@
 import { Server } from "tirne";
-const server = new Server([
-  { method: "GET", path: "/", handler: () => new Response("Hello") }
-]);
+import type { Route } from "tirne";
+const routes: Route[] = [
+  {
+    method: "GET",
+    path: "/",
+    handler: (req) => new Response("Hello from my framework!"),
+  },
+];
+
+const server = new Server(routes);
 
 export default {
   fetch: (req: Request) => server.fetch(req),
