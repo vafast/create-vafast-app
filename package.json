@@ -1,13 +1,30 @@
 {
-  "name": "create-tirne-app",
-  "version": "0.1.5",
-  "description": "Scaffold a new Tirne app in seconds.",
+  "name": "create-vafast-app",
+  "version": "0.1.0",
+  "description": "Scaffold a new Vafast app in seconds.",
   "bin": {
-    "create-tirne-app": "./bin/index.js"
+    "create-vafast-app": "./bin/index.js"
   },
   "type": "module",
   "dependencies": {
     "prompts": "^2.4.2"
   },
+  "devDependencies": {
+    "vafast": "latest",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vafast/vafast-cli.git"
+  },
+  "keywords": [
+    "vafast",
+    "cli",
+    "scaffold",
+    "typescript",
+    "api"
+  ],
+  "author": "",
   "license": "MIT"
 }

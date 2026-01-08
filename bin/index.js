@@ -8,26 +8,14 @@ const { prompt } = promptsPkg;
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const templatesDir = join(__dirname, "..", "templates");
 
-const choices = [
-  { title: "Bun", value: "bun-tirne" },
-  { title: "Cloudflare Workers", value: "workers-tirne" }
-];
-
-const { template } = await prompt({
-  type: "select",
-  name: "template",
-  message: "Choose your target environment:",
-  choices
-});
-
 const { targetDir } = await prompt({
   type: "text",
   name: "targetDir",
   message: "Project folder:",
-  initial: "my-tirne-app"
+  initial: "my-vafast-app"
 });
 
-const source = join(templatesDir, template);
+const source = join(templatesDir, "node-vafast");
 const dest = join(process.cwd(), targetDir);
 
 function copyRecursive(srcDir, destDir) {
@@ -44,20 +32,18 @@ function copyRecursive(srcDir, destDir) {
 }
 
 if (!existsSync(source)) {
-  console.error("Template not found:", template);
+  console.error("Template not found");
   process.exit(1);
 }
 
 copyRecursive(source, dest);
 
-console.log(`\n✅ Tirne app created in '${targetDir}'\n`);
+console.log(`\n✅ Vafast app created in '${targetDir}'\n`);
 
 console.log(`✨ Next steps:`);
-
 console.log(`  cd ${targetDir}`);
-console.log(`  bun install       # or npm install`);
-console.log(`  npm run dev   # or wrangler dev `);
+console.log(`  npm install`);
+console.log(`  npm run dev`);
 
-console.log(`\n🚀 Tirne is fetch-native, zero-dependency, and Edge-ready.`);
-console.log(`⭐️ Star it if you believe in small, powerful tools.`);
-console.log(`   → https://github.com/Tirne-ts/Tirne\n`);
+console.log(`\n🚀 Vafast - 高性能、类型安全的 TypeScript Web 框架`);
+console.log(`⭐️ Star: https://github.com/vafast/vafast\n`);

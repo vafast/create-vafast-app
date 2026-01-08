@@ -1,112 +1,75 @@
-# create-tirne-app
+# create-vafast-app
 
-> Scaffold blazing-fast, zero-boilerplate APIs across Bun, Deno, Workers, and Node — in seconds.
-> Tirne is how Go would write backend in TypeScript.
+> 快速创建高性能、类型安全的 Vafast 应用。
 
-👉 **Star Tirne on GitHub** and support a framework built on clarity and control:
-[https://github.com/Tirne-ts/Tirne](https://github.com/Tirne-ts/Tirne)
+👉 **Star Vafast on GitHub**:
+[https://github.com/vafast/vafast](https://github.com/vafast/vafast)
 
 ---
 
-## 🚀 Quickstart
+## 🚀 快速开始
 
 ```bash
-npx create-tirne-app
+npx create-vafast-app
 ```
-<p align="center"> <img src="./assets/terminal-setup.png" width="500" alt="Tirne setup terminal screenshot"> </p> 
-Choose your environment:
 
-* **Bun**
-* **Deno**
-* **Cloudflare Workers**
-* **Netlify Edge Functions**
+或者使用 npm/pnpm/yarn：
 
-This command sets up a ready-to-run Tirne project in seconds.
-
-📣 **Love minimal tools that get out of your way?**
-Star the main Tirne repo: [https://github.com/Tirne-ts/Tirne](https://github.com/Tirne-ts/Tirne)
+```bash
+npm create vafast-app
+pnpm create vafast-app
+yarn create vafast-app
+```
 
 ---
 
-## 📁 What You Get
+## 📁 生成内容
 
-A zero-boilerplate project, tailored for your runtime:
+一个开箱即用的 Vafast 项目：
 
-* `index.ts` with a working router and a `/` endpoint
-* Runtime config files (`bunfig.toml`, `deno.json`, `wrangler.toml`)
-* `package.json` with minimal scripts and dependencies
+* `src/index.ts` - 应用入口
+* `package.json` - 依赖和脚本配置
+* `tsconfig.json` - TypeScript 配置
 
-Example output:
+示例输出：
 
 ```bash
-✔ Choose your target environment: › Bun
-✔ Project folder: › my-tirne-app
+✔ Project folder: › my-vafast-app
 
-✅ Tirne app created in 'my-tirne-app'
+✅ Vafast app created in 'my-vafast-app'
 
 Next steps:
 
-  cd my-tirne-app
-  bun install       # or npm install
-  bun run dev       # or wrangler dev / deno task dev
+  cd my-vafast-app
+  npm install
+  npm run dev
 ```
 
 ---
 
-## 🌐 Why Tirne?
+## 🌐 为什么选择 Vafast？
 
-Tirne isn’t another framework. It’s a **code-first philosophy**:
+Vafast 是一个高性能、类型安全的 TypeScript Web 框架：
 
-* 🧱 **No classes. No magic. Just functions.**
-  Everything visible, understandable. If it can’t be written in five lines, it probably shouldn’t exist.
-
-* ⚡ **Zero startup, zero lock-in, zero boilerplate.**
-  Start small, stay lean. No CLI ceremony or forced structure.
-
-* 🧠 **Go-style backend, TypeScript-native.**
-  Explicit error handling, structured parallelism, full fetch compatibility.
-
-* 🌍 **Run anywhere.**
-  Bun, Deno, Node, Workers — all supported via `fetch()` API.
-
-If you're tired of macros, decorators, and overengineered abstractions — welcome home.
-
-💡 **Help us build a new standard.** Star the repo and spread the word:
-[https://github.com/Tirne-ts/Tirne](https://github.com/Tirne-ts/Tirne)
+* ⚡ **高性能** - 比 Express/Hono 快约 1.8x
+* 🔒 **类型安全** - 完整的 TypeScript 类型推断
+* 🎯 **Schema 验证** - 内置 TypeBox 支持，声明式验证
+* 🧩 **灵活中间件** - 可组合的中间件架构
+* 📦 **零配置** - 开箱即用
 
 ---
 
-## 🧱 Template Variants
-
-* `bun-tirne/` — Bun-native
-* `deno-tirne/` — Deno + `deno task`
-* `netlify-tirne/` — Netlify Edge Functions
-* `workers-tirne/` — Cloudflare Workers
-
-Each variant includes a single-entry `index.ts` tailored to its runtime.
-
----
-
-## 📦 Install Globally (Optional)
+## 📦 全局安装（可选）
 
 ```bash
-npm install -g create-tirne-app
+npm install -g create-vafast-app
 ```
 
-Then run:
+然后运行：
 
 ```bash
-create-tirne-app
+create-vafast-app
 ```
-
----
-
-## 📣 Join the Movement
-
-Tirne is fast, typed, fetch-native, and ready to scale with you. It’s not Express 3.0. It’s a new way to think about APIs.
-
-👉 **Star Tirne on GitHub** and help shape a future built on control, clarity, and code:
-[https://github.com/Tirne-ts/Tirne](https://github.com/Tirne-ts/Tirne)
 
 ---
 

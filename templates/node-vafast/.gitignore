@@ -18,9 +18,7 @@ Thumbs.db
 *.log
 npm-debug.log*
 
-# Test output
-coverage/
-
-# Temp
-.tmp/
-temp/
+# Environment
+.env
+.env.local
+.env.*.local
