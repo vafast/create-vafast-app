@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vafast/vafast-cli.git"
+    "url": "git+https://github.com/vafast/create-vafast-app.git"
   },
   "keywords": [
     "vafast",
