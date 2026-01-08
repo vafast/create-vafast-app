@@ -2,29 +2,45 @@
   "name": "create-vafast-app",
   "version": "0.1.0",
   "description": "Scaffold a new Vafast app in seconds.",
-  "bin": {
-    "create-vafast-app": "./bin/index.js"
-  },
   "type": "module",
-  "dependencies": {
-    "prompts": "^2.4.2"
-  },
-  "devDependencies": {
-    "vafast": "latest",
-    "typescript": "^5.0.0",
-    "@types/node": "^20.0.0"
+  "author": {
+    "name": "vafast",
+    "url": "https://github.com/vafast"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vafast/create-vafast-app.git"
+    "url": "https://github.com/vafast/create-vafast-app"
+  },
+  "bugs": "https://github.com/vafast/create-vafast-app/issues",
+  "homepage": "https://github.com/vafast/create-vafast-app",
+  "bin": {
+    "create-vafast-app": "./bin/index.js"
   },
   "keywords": [
     "vafast",
     "cli",
     "scaffold",
     "typescript",
-    "api"
+    "api",
+    "create-app"
   ],
-  "author": "",
-  "license": "MIT"
+  "files": [
+    "bin",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node bin/index.js",
+    "release": "npx bumpp && npm publish"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.4.5",
+    "vafast": "latest"
+  }
 }
