@@ -1,6 +1,6 @@
-import { Server, createHandler, serve } from 'vafast'
+import { Server, defineRoutes, createHandler, serve } from 'vafast'
 
-const server = new Server([
+const routes = defineRoutes([
   {
     method: 'GET',
     path: '/',
@@ -12,6 +12,8 @@ const server = new Server([
     handler: createHandler(() => ({ status: 'ok', timestamp: Date.now() }))
   }
 ])
+
+const server = new Server(routes)
 
 serve({ fetch: server.fetch, port: 3000 }, () => {
   console.log('🚀 Server running on http://localhost:3000')
