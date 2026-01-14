@@ -27,9 +27,39 @@ yarn create vafast-app
 
 一个开箱即用的 Vafast 项目：
 
-* `src/index.ts` - 应用入口
-* `package.json` - 依赖和脚本配置
-* `tsconfig.json` - TypeScript 配置
+```
+my-vafast-app/
+├── .cursor/
+│   └── rules/
+│       ├── vafast.mdc        # Cursor AI 规则
+│       └── typescript.mdc    # TypeScript 规范
+├── .github/
+│   └── copilot-instructions.md  # GitHub Copilot 指令
+├── src/
+│   └── index.ts              # 应用入口
+├── AGENTS.md                 # AI 开发指南（OpenAI Codex）
+├── CLAUDE.md                 # Claude 项目规则
+├── package.json              # 依赖和脚本配置
+└── tsconfig.json             # TypeScript 配置
+```
+
+## 🤖 内置 AI 开发规则
+
+让 Cursor、GitHub Copilot、Claude 等 AI 工具更懂 Vafast：
+
+| 文件 | 支持的 AI 工具 |
+|------|---------------|
+| `.cursor/rules/*.mdc` | Cursor |
+| `.github/copilot-instructions.md` | GitHub Copilot |
+| `AGENTS.md` | OpenAI Codex, GitHub Copilot Agent |
+| `CLAUDE.md` | Claude |
+
+AI 将自动学习：
+- Vafast 路由定义模式
+- TypeBox schema 用法
+- 中间件编写规范
+- SSE 流式响应
+- 错误处理最佳实践
 
 示例输出：
 

@@ -1,0 +1,185 @@
+---
+description: Vafast 框架开发规则 - 高性能、类型安全的 TypeScript Web 框架
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: true
+---
+
+# Vafast 开发规则
+
+你正在开发一个使用 Vafast 框架的 TypeScript 项目。请遵循以下规则：
+
+## 核心原则
+
+1. **类型安全优先** - 使用 TypeBox 定义 schema，让类型自动推断
+2. **函数式风格** - 优先使用函数而非 class
+3. **Go 风格错误处理** - 返回 `{ data, error }` 而非抛出异常
+4. **模块化** - 功能分离，每个函数职责单一
+
+## 路由定义
+
+```typescript
+// ✅ 正确：使用 defineRoute 定义路由
+import { defineRoute, defineRoutes, Type } from 'vafast'
+
+const routes = defineRoutes([
+  defineRoute({
+    method: 'GET',
+    path: '/users',
+    name: 'get_users',           // 用于 AI tools 和文档
+    description: '获取用户列表',   // 描述接口功能
+    schema: {
+      query: Type.Object({
+        page: Type.Number(),
+        limit: Type.Optional(Type.Number()),
+      })
+    },
+    handler: ({ query }) => ({
+      users: [],
+      page: query.page,
+    })
+  })
+])
+
+// ❌ 错误：不要使用裸对象定义路由
+const badRoutes = [
+  { method: 'GET', path: '/users', handler: () => {} }  // 缺少类型推断
+]
+```
+
+## Schema 定义
+
+```typescript
+import { Type } from 'vafast'
+
+// ✅ 正确：使用 TypeBox 类型
+const UserSchema = Type.Object({
+  id: Type.String(),
+  name: Type.String(),
+  email: Type.String({ format: 'email' }),
+  age: Type.Optional(Type.Number()),
+})
+
+// schema 支持的字段
+schema: {
+  body: Type.Object({...}),    // POST/PUT 请求体
+  query: Type.Object({...}),   // GET 查询参数
+  params: Type.Object({...}),  // 路径参数 /users/:id
+  headers: Type.Object({...}), // 请求头
+  cookies: Type.Object({...}), // Cookie
+}
+```
+
+## Handler 上下文
+
+```typescript
+handler: ({ body, query, params, headers, cookies, request }) => {
+  // body    - 请求体（已验证和类型推断）
+  // query   - 查询参数
+  // params  - 路径参数
+  // headers - 请求头
+  // cookies - Cookie
+  // request - 原始 Request 对象
+  
+  return { ... }  // 直接返回对象，自动序列化为 JSON
+}
+```
+
+## 中间件
+
+```typescript
+import { defineMiddleware } from 'vafast'
+
+// 定义带类型的中间件
+const authMiddleware = defineMiddleware<{ user: User }>(async (req, next) => {
+  const token = req.headers.get('Authorization')
+  const user = await verifyToken(token)
+  return next({ user })  // 传递上下文给 handler
+})
+
+// 在路由中使用
+defineRoute({
+  method: 'GET',
+  path: '/profile',
+  middleware: [authMiddleware],
+  handler: ({ user }) => ({  // user 类型自动推断
+    id: user.id,
+    name: user.name,
+  })
+})
+```
+
+## SSE 流式响应
+
+```typescript
+import { createSSEHandler } from 'vafast'
+
+defineRoute({
+  method: 'GET',
+  path: '/chat/stream',
+  handler: createSSEHandler(async function* ({ query }) {
+    yield { event: 'start', data: { message: '开始' } }
+    
+    for await (const chunk of aiStream(query.prompt)) {
+      yield { data: { text: chunk } }
+    }
+    
+    yield { event: 'end', data: { message: '完成' } }
+  })
+})
+```
+
+## 错误处理
+
+```typescript
+// 方式 1：返回错误响应
+handler: ({ query }) => {
+  if (!query.id) {
+    return new Response(JSON.stringify({ code: 400, message: '缺少 ID' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
+  return { ... }
+}
+
+// 方式 2：使用 HttpError
+import { HttpError } from 'vafast'
+
+handler: ({ query }) => {
+  if (!query.id) {
+    throw new HttpError(400, '缺少 ID')
+  }
+  return { ... }
+}
+```
+
+## 嵌套路由
+
+```typescript
+defineRoute({
+  path: '/api/v1',
+  middleware: [apiKeyMiddleware],
+  children: [
+    defineRoute({
+      method: 'GET',
+      path: '/users',
+      handler: () => []
+    }),
+    defineRoute({
+      method: 'POST',
+      path: '/users',
+      schema: { body: CreateUserSchema },
+      handler: ({ body }) => ({ id: '1', ...body })
+    })
+  ]
+})
+// 生成：GET /api/v1/users, POST /api/v1/users
+```
+
+## 禁止事项
+
+1. ❌ 不要使用 `as` 类型断言（除非调用第三方库）
+2. ❌ 不要使用 class 定义路由或服务
+3. ❌ 不要手动 JSON.parse/stringify 请求体（框架自动处理）
+4. ❌ 不要使用 try-catch 包裹所有代码（框架有全局错误处理）
+5. ❌ 不要创建不必要的类型导出文件
