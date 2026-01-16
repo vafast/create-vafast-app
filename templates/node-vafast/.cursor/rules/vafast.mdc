@@ -13,7 +13,8 @@ alwaysApply: true
 1. **类型安全优先** - 使用 TypeBox 定义 schema，让类型自动推断
 2. **函数式风格** - 优先使用函数而非 class
 3. **Go 风格错误处理** - 返回 `{ data, error }` 而非抛出异常
-4. **模块化** - 功能分离，每个函数职责单一
+4. **HTTP 状态码** - 错误必须使用正确的 HTTP 状态码
+5. **模块化** - 功能分离，每个函数职责单一
 
 ## 路由定义
 
@@ -108,6 +109,51 @@ defineRoute({
 })
 ```
 
+## 错误处理（最佳实践）
+
+使用 HTTP 状态码 + `{ code, message }` 格式：
+
+```typescript
+import { err } from 'vafast'
+
+// ✅ 正确：使用 err() 抛出错误
+handler: ({ params }) => {
+  const user = db.findUser(params.id)
+  if (!user) {
+    throw err.notFound('用户不存在')  // HTTP 404
+  }
+  if (!user.active) {
+    throw err.forbidden('账号已禁用', 10001)  // HTTP 403, code: 10001
+  }
+  return user
+}
+
+// 预定义错误
+throw err.badRequest('参数错误')       // 400
+throw err.unauthorized('请先登录')    // 401
+throw err.forbidden('无权限')          // 403
+throw err.notFound('不存在')           // 404
+
+// 自定义业务码
+throw err.notFound('用户不存在', 10001)  // HTTP 404, { code: 10001, message: "用户不存在" }
+
+// ❌ 错误：不要返回 200 + success: false
+handler: () => {
+  return { success: false, message: '错误' }  // 状态码仍是 200！
+}
+```
+
+**错误响应格式：**
+
+```json
+HTTP 404 Not Found
+
+{
+  "code": 10001,
+  "message": "用户不存在"
+}
+```
+
 ## SSE 流式响应
 
 ```typescript
@@ -126,31 +172,6 @@ defineRoute({
     yield { event: 'end', data: { message: '完成' } }
   })
 })
-```
-
-## 错误处理
-
-```typescript
-// 方式 1：返回错误响应
-handler: ({ query }) => {
-  if (!query.id) {
-    return new Response(JSON.stringify({ code: 400, message: '缺少 ID' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' }
-    })
-  }
-  return { ... }
-}
-
-// 方式 2：使用 HttpError
-import { HttpError } from 'vafast'
-
-handler: ({ query }) => {
-  if (!query.id) {
-    throw new HttpError(400, '缺少 ID')
-  }
-  return { ... }
-}
 ```
 
 ## 嵌套路由
@@ -176,6 +197,28 @@ defineRoute({
 // 生成：GET /api/v1/users, POST /api/v1/users
 ```
 
+## API 客户端（@vafast/api-client）
+
+```typescript
+import { createClient, eden, InferEden } from '@vafast/api-client'
+
+// 创建客户端
+const client = createClient('http://localhost:3000')
+  .headers({ 'Authorization': 'Bearer token' })
+  .timeout(30000)
+
+// 类型推断
+type Api = InferEden<typeof routes>
+const api = eden<Api>(client)
+
+// 调用
+const { data, error } = await api.users.get({ page: 1 })
+if (error) {
+  console.error(`错误 ${error.code}: ${error.message}`)
+  return
+}
+```
+
 ## 禁止事项
 
 1. ❌ 不要使用 `as` 类型断言（除非调用第三方库）
@@ -183,3 +226,4 @@ defineRoute({
 3. ❌ 不要手动 JSON.parse/stringify 请求体（框架自动处理）
 4. ❌ 不要使用 try-catch 包裹所有代码（框架有全局错误处理）
 5. ❌ 不要创建不必要的类型导出文件
+6. ❌ 不要返回 200 + `{ success: false }` 格式错误
