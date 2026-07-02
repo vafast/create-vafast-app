@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs'
+import { createInterface } from 'readline/promises'
 import { join } from 'path'
+import { stdin as input, stdout as output } from 'process'
 import { fileURLToPath } from 'url'
-import promptsPkg from 'prompts'
 
-const { prompt } = promptsPkg
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const templatesDir = join(__dirname, '..', 'templates')
 
@@ -67,6 +67,31 @@ function copyRecursive(srcDir, destDir) {
   }
 }
 
+async function promptProjectName(initial = 'my-vafast-app') {
+  const rl = createInterface({ input, output })
+
+  try {
+    const answer = await rl.question(`Project folder: (${initial}) `)
+    return answer.trim() || initial
+  }
+  catch (error) {
+    if (
+      error
+      && typeof error === 'object'
+      && 'code' in error
+      && error.code === 'ABORT_ERR'
+    ) {
+      console.log('Cancelled.')
+      process.exit(0)
+    }
+
+    throw error
+  }
+  finally {
+    rl.close()
+  }
+}
+
 async function main() {
   let targetDir = resolveTargetDir(process.argv.slice(2))
 
@@ -76,19 +101,7 @@ async function main() {
       console.log(`Using default project folder: ${targetDir}`)
     }
     else {
-      const answer = await prompt({
-        type: 'text',
-        name: 'targetDir',
-        message: 'Project folder:',
-        initial: 'my-vafast-app',
-      })
-
-      if (!answer.targetDir) {
-        console.log('Cancelled.')
-        process.exit(0)
-      }
-
-      targetDir = answer.targetDir
+      targetDir = await promptProjectName()
     }
   }
 
