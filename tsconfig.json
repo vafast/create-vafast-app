@@ -6,7 +6,11 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "vafast": ["node_modules/vafast"]
+    }
   },
   "include": ["templates/**/*"]
 }

@@ -1,6 +1,6 @@
 {
   "name": "create-vafast-app",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Scaffold a new Vafast app in seconds.",
   "type": "module",
   "author": {
@@ -34,5 +34,9 @@
     "test": "node --test test/cli.test.js test/template.test.js",
     "release": "npm test && npx bumpp && npm publish"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vafast": "^0.8.1"
+  }
 }
