@@ -14,7 +14,7 @@
   "bugs": "https://github.com/vafast/create-vafast-app/issues",
   "homepage": "https://github.com/vafast/create-vafast-app",
   "bin": {
-    "create-vafast-app": "./bin/index.js"
+    "create-vafast-app": "bin/index.js"
   },
   "keywords": [
     "vafast",
