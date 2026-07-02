@@ -1,16 +1,16 @@
-import { Server, defineRoutes, createHandler, serve } from 'vafast'
+import { Server, defineRoute, defineRoutes, serve } from 'vafast'
 
 const routes = defineRoutes([
-  {
+  defineRoute({
     method: 'GET',
     path: '/',
-    handler: createHandler(() => 'Hello Vafast!')
-  },
-  {
+    handler: () => 'Hello Vafast!',
+  }),
+  defineRoute({
     method: 'GET',
     path: '/health',
-    handler: createHandler(() => ({ status: 'ok', timestamp: Date.now() }))
-  }
+    handler: () => ({ status: 'ok', timestamp: Date.now() }),
+  }),
 ])
 
 const server = new Server(routes)
