@@ -141,21 +141,22 @@ HTTP 404 Not Found
 ## SSE 流式响应
 
 ```typescript
-import { createSSEHandler } from 'vafast'
+import { defineRoute, sse } from 'vafast'
 
 defineRoute({
   method: 'GET',
   path: '/stream',
-  handler: createSSEHandler(async function* (ctx) {
-    yield { event: 'start', data: { message: '开始' } }
-    
+  sse: true,
+  handler: async function* () {
+    yield { type: 'start', message: '开始' }
+
     for (let i = 0; i < 10; i++) {
-      yield { data: { count: i } }
+      yield { count: i }
       await sleep(100)
     }
-    
-    yield { event: 'end', data: { message: '完成' } }
-  })
+
+    yield sse({ event: 'end' }, { message: '完成' })
+  },
 })
 ```
 

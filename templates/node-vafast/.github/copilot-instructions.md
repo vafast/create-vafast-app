@@ -98,12 +98,17 @@ HTTP 404 Not Found
 ## SSE 流式响应
 
 ```typescript
-import { createSSEHandler } from 'vafast'
+import { defineRoute, sse } from 'vafast'
 
-createSSEHandler(async function* (ctx) {
-  yield { event: 'start', data: {} }
-  yield { data: { text: 'chunk' } }
-  yield { event: 'end', data: {} }
+defineRoute({
+  method: 'GET',
+  path: '/stream',
+  sse: true,
+  handler: async function* () {
+    yield { status: 'start' }
+    yield { text: 'chunk' }
+    yield sse({ event: 'end' }, { done: true })
+  },
 })
 ```
 

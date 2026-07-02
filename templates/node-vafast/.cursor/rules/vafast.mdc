@@ -157,20 +157,21 @@ HTTP 404 Not Found
 ## SSE 流式响应
 
 ```typescript
-import { createSSEHandler } from 'vafast'
+import { defineRoute, sse } from 'vafast'
 
 defineRoute({
   method: 'GET',
   path: '/chat/stream',
-  handler: createSSEHandler(async function* ({ query }) {
-    yield { event: 'start', data: { message: '开始' } }
-    
+  sse: true,
+  handler: async function* ({ query }) {
+    yield { type: 'start', message: '开始' }
+
     for await (const chunk of aiStream(query.prompt)) {
-      yield { data: { text: chunk } }
+      yield { type: 'text_delta', text: chunk }
     }
-    
-    yield { event: 'end', data: { message: '完成' } }
-  })
+
+    yield sse({ event: 'end' }, { message: '完成' })
+  },
 })
 ```
 
