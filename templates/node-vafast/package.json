@@ -9,7 +9,7 @@
     "serve": "node dist/index.js"
   },
   "dependencies": {
-    "vafast": "^0.7.7"
+    "vafast": "^0.8.1"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
