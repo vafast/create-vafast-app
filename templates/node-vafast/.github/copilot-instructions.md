@@ -95,6 +95,8 @@ HTTP 404 Not Found
 }
 ```
 
+**Schema 校验失败（422）**：`defineRoute.schema` 自动返回 `{ code: 422, message, details[] }`。
+
 ## SSE 流式响应
 
 ```typescript

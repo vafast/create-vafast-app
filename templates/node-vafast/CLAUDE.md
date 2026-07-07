@@ -138,6 +138,26 @@ HTTP 404 Not Found
 }
 ```
 
+### Schema 校验失败（422）
+
+`defineRoute` 的 `schema` 校验失败时自动返回 HTTP 422：
+
+```json
+{
+  "code": 422,
+  "message": "请求参数校验失败",
+  "details": [
+    {
+      "location": "body",
+      "path": "/email",
+      "field": "email",
+      "message": "Expected string to match 'email' format",
+      "value": "invalid"
+    }
+  ]
+}
+```
+
 ## SSE 流式响应
 
 ```typescript
@@ -204,6 +224,12 @@ if (error) {
   return
 }
 console.log(data.users)
+
+// 422 校验错误 → 表单
+import { isValidationError, mapDetailsToFormFields } from '@vafast/api-client'
+if (error && isValidationError(error)) {
+  formRef.setFields(mapDetailsToFormFields(error.details))
+}
 
 // 动态参数
 const { data: user } = await api.users({ id: '123' }).get()

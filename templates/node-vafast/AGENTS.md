@@ -119,6 +119,8 @@ HTTP 404 Not Found
 }
 ```
 
+**Schema 校验失败（422）**：`defineRoute.schema` 自动返回 `{ code: 422, message, details[] }`，`details[].field` 可用于表单映射。
+
 ## API 客户端（@vafast/api-client）
 
 ```typescript
@@ -140,6 +142,12 @@ if (error) {
   return
 }
 console.log(data.users)
+
+// 422 校验错误 → 表单
+import { isValidationError, mapDetailsToFormFields } from '@vafast/api-client'
+if (error && isValidationError(error)) {
+  formRef.setFields(mapDetailsToFormFields(error.details))
+}
 ```
 
 ## 关键原则
