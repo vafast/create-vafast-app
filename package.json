@@ -37,6 +37,6 @@
   "license": "MIT",
   "devDependencies": {
     "typescript": "^5.4.5",
-    "vafast": "^0.8.2"
+    "vafast": "^0.8.3"
   }
 }
